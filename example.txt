@@ -1,0 +1,47 @@
+This example shows our new trace and count debug tools.
+
+We updated trace, allowing it to trace eval primatives (macros) as well as functions (lambdas).
+
+Count simply returns the number of times a non-literal has been evaluated. 
+Lispy is always counting, but counts only get displayed when (count <arg>) is called.
+
+ben@LCSEE-LOUD:~/Dropbox/CS 310/cs310-code/proj4$ python lis2.py
+lis.py> (define factorial (lambda (n) (if (> n 1) (* (factorial (- n 1)) n) 1)))
+lis.py> (trace factorial)
+(factorial)
+lis.py> (factorial 3)
+0: (factorial 3)
+ 1: (factorial 2)
+  2: (factorial 1)
+  2: returned 1
+ 1: returned 2
+0: returned 6
+6
+lis.py> (count factorial)
+3
+lis.py> (factorial 2)
+0: (factorial 2)
+ 1: (factorial 1)
+ 1: returned 1
+0: returned 2
+2
+lis.py> (count factorial)
+5
+lis.py> (begin (+ 2 2) (+ 2 2) (begin (begin (+ 2 2))))
+4
+lis.py> (count begin)
+3
+lis.py> (trace begin)
+(begin)
+lis.py> (begin (+ 2 2) (+ 2 2) (begin (begin (+ 2 2))))
+0: (begin 4 4 4)
+ 1: (begin 4)
+  2: (begin 4)
+  2: returned 4
+ 1: returned 4
+0: returned 4
+4
+lis.py> (count begin)
+6
+lis.py> exit
+
